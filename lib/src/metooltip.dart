@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/rendering.dart';
 
 import 'builtinwidgets/defTooltipWidget.dart';
@@ -105,8 +104,7 @@ class MeTooltip extends StatefulWidget {
   _MeTooltipState createState() => _MeTooltipState();
 }
 
-class _MeTooltipState extends State<MeTooltip>
-    with SingleTickerProviderStateMixin {
+class _MeTooltipState extends State<MeTooltip> with SingleTickerProviderStateMixin {
   static const double _defaultVerticalOffset = 24.0;
   static const EdgeInsetsGeometry _defaultMargin = EdgeInsets.zero;
   static const Duration _fadeInDuration = Duration(milliseconds: 150);
@@ -134,7 +132,7 @@ class _MeTooltipState extends State<MeTooltip>
   @override
   void initState() {
     super.initState();
-    _mouseIsConnected = RendererBinding.instance!.mouseTracker.mouseIsConnected;
+    _mouseIsConnected = RendererBinding.instance.mouseTracker.mouseIsConnected;
     // 默认动画
     _controller = AnimationController(
       duration: _fadeInDuration, // 动画持续时间
@@ -148,11 +146,10 @@ class _MeTooltipState extends State<MeTooltip>
      * RendererBinding 是渲染树和Flutter引擎的胶水层
      * 负责管理帧重绘、窗口尺寸和渲染相关参数变化的监听。
      */
-    RendererBinding.instance!.mouseTracker
-        .addListener(_handleMouseTrackerChange);
+    RendererBinding.instance.mouseTracker.addListener(_handleMouseTrackerChange);
     // 全局指针事件 当点击其他地方时，隐藏。
     // Flutter中处理手势的抽象服务类，继承自BindingBase类
-    GestureBinding.instance!.pointerRouter.addGlobalRoute(_handlePointerEvent);
+    GestureBinding.instance.pointerRouter.addGlobalRoute(_handlePointerEvent);
   }
 
   @override
@@ -166,10 +163,8 @@ class _MeTooltipState extends State<MeTooltip>
 
   @override
   void dispose() {
-    GestureBinding.instance!.pointerRouter
-        .removeGlobalRoute(_handlePointerEvent);
-    RendererBinding.instance!.mouseTracker
-        .removeListener(_handleMouseTrackerChange);
+    GestureBinding.instance.pointerRouter.removeGlobalRoute(_handlePointerEvent);
+    RendererBinding.instance.mouseTracker.removeListener(_handleMouseTrackerChange);
     if (_entry != null) _removeEntry();
     _controller.dispose();
     super.dispose();
@@ -190,7 +185,7 @@ class _MeTooltipState extends State<MeTooltip>
     final ThemeData theme = Theme.of(context);
     // dark模式
     if (theme.brightness == Brightness.dark) {
-      defaultTextStyle = theme.textTheme.bodyText2!.copyWith(
+      defaultTextStyle = theme.textTheme.bodyMedium!.copyWith(
         color: Colors.black,
         fontSize: _getDefaultFontSize(),
       );
@@ -200,7 +195,7 @@ class _MeTooltipState extends State<MeTooltip>
       );
       defaultTriangleColor = Colors.white.withOpacity(0.9);
     } else {
-      defaultTextStyle = theme.textTheme.bodyText2!.copyWith(
+      defaultTextStyle = theme.textTheme.bodyMedium!.copyWith(
         color: Colors.white,
         fontSize: _getDefaultFontSize(),
       );
@@ -257,6 +252,7 @@ class _MeTooltipState extends State<MeTooltip>
     }
     // 延迟显示
     _showTimer = Timer(waitDuration, _ensureTooltipVisible);
+    return null;
   }
 
   void _hideTooltip({bool immediately = false}) {
@@ -299,7 +295,7 @@ class _MeTooltipState extends State<MeTooltip>
     final OverlayState overlayState = Overlay.of(
       context,
       debugRequiredFor: widget,
-    )!;
+    );
     final RenderBox box = context.findRenderObject()! as RenderBox;
     final Size targetSize = box.size;
     // localToGlobal 指的是将某个容器内的某一个点转换成全局坐标
@@ -361,8 +357,7 @@ class _MeTooltipState extends State<MeTooltip>
     if (!mounted) {
       return;
     }
-    final bool mouseIsConnected =
-        RendererBinding.instance!.mouseTracker.mouseIsConnected;
+    final bool mouseIsConnected = RendererBinding.instance.mouseTracker.mouseIsConnected;
     if (_mouseIsConnected != mouseIsConnected) {
       setState(() {
         _mouseIsConnected = mouseIsConnected;
